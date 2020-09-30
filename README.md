@@ -1,24 +1,3 @@
-# README
+# News For You!
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+News For You!は、自分の英語力に適した英語ニュースを探すためのサービスです。ニュースタイトルの横に表示されている「**記事を読むために必要なTOEICスコアの目安**」を確認しながら、興味のあるニュースを探すことができます。
