@@ -1,3 +1,15 @@
+AllCops:
+  Exclude:
+    - '**/templates/**/*'
+    - '**/vendor/**/*'
+    - 'app/views/**/*'
+    - 'config/**/*'
+    - 'node_modules/**/*'
+    - 'db/schema.rb'
+    - 'storage/**/*'
+    - 'tmp/**/*'
+    - 'bin/bundle'
+
 inherit_gem:
   rubocop-fjord:
     - "config/rubocop.yml"
