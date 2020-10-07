@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Source:</strong>
+  <%= @article.source %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @article.title %>
+</p>
+
+<p>
+  <strong>Japanese title:</strong>
+  <%= @article.japanese_title %>
+</p>
+
+<p>
+  <strong>Words:</strong>
+  <%= @article.words %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @article.level %>
+</p>
+
+<%= link_to 'Edit', edit_article_path(@article) %> |
+<%= link_to 'Back', articles_path %>
