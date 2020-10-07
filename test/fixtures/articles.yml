@@ -1,15 +1,36 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  source: 1
-  title: MyString
-  japanese_title: MyString
-  words: 
-  level: 1
+article_1:
+  source: 0
+  title: President Trump tweets...
+  japanese_title: トランプ大統領...とツイート
+  words: 681
+  level: 7
 
-two:
+article_2:
   source: 1
-  title: MyString
-  japanese_title: MyString
-  words: 
-  level: 1
+  title: Self-driving car planned to...
+  japanese_title: 自動運転車が...の予定
+  words: 436
+  level: 8
+
+article_3:
+  source: 1
+  title: How to start a career in AI?
+  japanese_title: AI分野の経歴をどのように始めるか？
+  words: 1218
+  level: 8
+
+article_4:
+  source: 0
+  title: Simple recipes for Halloween!
+  japanese_title: ハロウィンのためのカンタンなレシピ！
+  words: 603
+  level: 6
+
+article_5:
+  source: 1
+  title: US Congress pass...
+  japanese_title: アメリカ合衆国議会...を決議
+  words: 1672
+  level: 9
