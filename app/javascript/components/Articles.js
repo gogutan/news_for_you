@@ -66,7 +66,7 @@ class Articles extends React.Component {
             {articles.map(article => (
               <tr key={article.id}>
                 <td>{article.source}</td>
-                <td>{article.title}</td>
+                <td><a href={article.url}>{article.title}</a></td>
                 <td>{article.japanese_title}</td>
                 <td>{article.words}({Math.round(article.words / this.state.wpm * 10) / 10}mins)</td>
                 <td>{article.level}</td>
