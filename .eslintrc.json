@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "extends": ["standard", "eslint:recommended", "plugin:react/recommended"],
   "plugins": ["react"],
   "env": {
