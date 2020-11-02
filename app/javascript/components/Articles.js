@@ -1,8 +1,26 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step))
 const scores = range(300, 990, 5)
 const wpms = range(30, 300, 5)
+
+function Article (props) {
+  Article.propTypes = {
+    article: PropTypes.object,
+    wpm: PropTypes.number
+  }
+  return (
+    <>
+      <td>{props.article.source}</td>
+      <td><a href={props.article.url}>{props.article.title}</a></td>
+      <td>{props.article.japanese_title}</td>
+      <td>{props.article.words}</td>
+      <td>{Math.round(props.article.words / props.wpm * 10) / 10} mins</td>
+      <td>{props.article.level}</td>
+    </>
+  )
+}
 
 class Articles extends React.Component {
   constructor (props) {
@@ -39,12 +57,16 @@ class Articles extends React.Component {
       )
   }
 
+  renderArticle (article) {
+    return <Article article={article} wpm={this.state.wpm} />
+  }
+
   handleToeicChange (event) {
-    this.setState({ toeic: event.target.value })
+    this.setState({ toeic: Number(event.target.value) })
   }
 
   handleWpmChange (event) {
-    this.setState({ wpm: event.target.value })
+    this.setState({ wpm: Number(event.target.value) })
   }
 
   render () {
@@ -82,12 +104,7 @@ class Articles extends React.Component {
             <tbody>
               {articles.map(article => (
                 <tr key={article.id}>
-                  <td>{article.source}</td>
-                  <td><a href={article.url}>{article.title}</a></td>
-                  <td>{article.japanese_title}</td>
-                  <td>{article.words}</td>
-                  <td>{Math.round(article.words / this.state.wpm * 10) / 10} mins</td>
-                  <td>{article.level}</td>
+                  {this.renderArticle(article)}
                 </tr>
               ))}
             </tbody>
