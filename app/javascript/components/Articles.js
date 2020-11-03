@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import GoogleLogo from 'images/greyscale-short.png'
 
 const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step))
 const scores = range(300, 990, 5)
@@ -95,7 +96,7 @@ class Articles extends React.Component {
               <tr>
                 <th>Source</th>
                 <th>Title</th>
-                <th>Japanese Title</th>
+                <th>Japanese Title <img src={GoogleLogo}></img></th>
                 <th>Words</th>
                 <th>Time</th>
                 <th>Level</th>
