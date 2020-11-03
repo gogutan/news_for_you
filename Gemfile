@@ -31,6 +31,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 # not default
+gem 'nokogiri'
 gem 'react-rails'
 
 group :development, :test do
