@@ -53,16 +53,42 @@ class ArticleTable extends React.Component {
   }
 }
 
+class SearchBar extends React.Component {
+  constructor (props) {
+    super(props)
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
+  }
+
+  handleFilterTextChange (event) {
+    this.props.onFilterTextChange(event)
+  }
+
+  render () {
+    return (
+      <form>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={this.props.filterText}
+          onChange={this.handleFilterTextChange}
+        />
+      </form>
+    )
+  }
+}
+
 class FilterableArticleTable extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      filterText: '',
       toeic: 600,
       wpm: 100,
       error: null,
       isLoaded: false,
       articles: []
     }
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
     this.handleToeicChange = this.handleToeicChange.bind(this)
     this.handleWpmChange = this.handleWpmChange.bind(this)
   }
@@ -86,6 +112,10 @@ class FilterableArticleTable extends React.Component {
       )
   }
 
+  handleFilterTextChange (event) {
+    this.setState({ filterText: event.target.value })
+  }
+
   handleToeicChange (event) {
     this.setState({ toeic: Number(event.target.value) })
   }
@@ -95,7 +125,16 @@ class FilterableArticleTable extends React.Component {
   }
 
   render () {
-    const { error, isLoaded } = this.state
+    const { error, isLoaded, filterText, toeic, wpm, articles } = this.state
+    const filteredArticles = []
+
+    articles.forEach((article) => {
+      const reg = new RegExp(filterText, 'i')
+      if (article.title.match(reg)) {
+        filteredArticles.push(article)
+      }
+    })
+
     if (error) {
       return <div>Error: {error.message}</div>
     } else if (!isLoaded) {
@@ -103,21 +142,25 @@ class FilterableArticleTable extends React.Component {
     } else {
       return (
         <div>
+          <SearchBar
+            filterText={filterText}
+            onFilterTextChange={this.handleFilterTextChange}
+          />
           <label>
             Your TOEIC:
-            <select value={this.state.toeic} onChange={this.handleToeicChange}>
+            <select value={toeic} onChange={this.handleToeicChange}>
               { scores.map(s => <option key={s.toString()} value={s.toString()}>{s}</option>) }
             </select>
           </label>
           <label>
             Your WPM:
-            <select value={this.state.wpm} onChange={this.handleWpmChange}>
+            <select value={wpm} onChange={this.handleWpmChange}>
             { wpms.map(w => <option key={w.toString()} value={w.toString()}>{w}</option>) }
             </select>
           </label>
           <ArticleTable
-            articles={this.state.articles}
-            wpm={this.state.wpm}
+            articles={filteredArticles}
+            wpm={wpm}
           />
         </div>
       )
@@ -140,6 +183,11 @@ ArticleRow.propTypes = {
 ArticleTable.propTypes = {
   articles: PropTypes.array,
   wpm: PropTypes.number
+}
+
+SearchBar.propTypes = {
+  filterText: PropTypes.string,
+  onFilterTextChange: PropTypes.func
 }
 
 export default FilterableArticleTable
