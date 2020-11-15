@@ -6,24 +6,54 @@ const range = (start, stop, step) => Array.from({ length: (stop - start) / step 
 const scores = range(300, 990, 5)
 const wpms = range(30, 300, 5)
 
-function Article (props) {
-  Article.propTypes = {
-    article: PropTypes.object,
-    wpm: PropTypes.number
+class ArticleRow extends React.Component {
+  render () {
+    const article = this.props.article
+    const wpm = this.props.wpm
+    return (
+      <tr>
+        <td>{article.source}</td>
+        <td><a href={article.url}>{article.title}</a></td>
+        <td>{article.japanese_title}</td>
+        <td>{article.words}</td>
+        <td>{Math.round(article.words / wpm * 10) / 10} mins</td>
+        <td>{article.level}</td>
+      </tr>
+    )
   }
-  return (
-    <>
-      <td>{props.article.source}</td>
-      <td><a href={props.article.url}>{props.article.title}</a></td>
-      <td>{props.article.japanese_title}</td>
-      <td>{props.article.words}</td>
-      <td>{Math.round(props.article.words / props.wpm * 10) / 10} mins</td>
-      <td>{props.article.level}</td>
-    </>
-  )
 }
 
-class Articles extends React.Component {
+class ArticleTable extends React.Component {
+  render () {
+    const rows = []
+    this.props.articles.forEach((article) => {
+      rows.push(
+        <ArticleRow
+          article={article}
+          key={article.title}
+          wpm={this.props.wpm}
+        />
+      )
+    })
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Title</th>
+            <th>Japanese Title <img src={GoogleLogo}></img></th>
+            <th>Words</th>
+            <th>Time</th>
+            <th>Level</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    )
+  }
+}
+
+class FilterableArticleTable extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -47,8 +77,6 @@ class Articles extends React.Component {
             articles: result
           })
         },
-        // 補足：コンポーネント内のバグによる例外を隠蔽しないためにも
-        // catch()ブロックの代わりにここでエラーハンドリングすることが重要です
         (error) => {
           this.setState({
             isLoaded: true,
@@ -56,10 +84,6 @@ class Articles extends React.Component {
           })
         }
       )
-  }
-
-  renderArticle (article) {
-    return <Article article={article} wpm={this.state.wpm} />
   }
 
   handleToeicChange (event) {
@@ -71,14 +95,14 @@ class Articles extends React.Component {
   }
 
   render () {
-    const { error, isLoaded, articles } = this.state
+    const { error, isLoaded } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
       return (
-        <>
+        <div>
           <label>
             Your TOEIC:
             <select value={this.state.toeic} onChange={this.handleToeicChange}>
@@ -91,29 +115,31 @@ class Articles extends React.Component {
             { wpms.map(w => <option key={w.toString()} value={w.toString()}>{w}</option>) }
             </select>
           </label>
-          <table>
-            <thead>
-              <tr>
-                <th>Source</th>
-                <th>Title</th>
-                <th>Japanese Title <img src={GoogleLogo}></img></th>
-                <th>Words</th>
-                <th>Time</th>
-                <th>Level</th>
-              </tr>
-            </thead>
-            <tbody>
-              {articles.map(article => (
-                <tr key={article.id}>
-                  {this.renderArticle(article)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
+          <ArticleTable
+            articles={this.state.articles}
+            wpm={this.state.wpm}
+          />
+        </div>
       )
     }
   }
 }
 
-export default Articles
+ArticleRow.propTypes = {
+  article: PropTypes.shape({
+    source: PropTypes.string,
+    url: PropTypes.string,
+    title: PropTypes.string,
+    japanese_title: PropTypes.string,
+    words: PropTypes.number,
+    level: PropTypes.number
+  }),
+  wpm: PropTypes.number
+}
+
+ArticleTable.propTypes = {
+  articles: PropTypes.array,
+  wpm: PropTypes.number
+}
+
+export default FilterableArticleTable
