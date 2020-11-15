@@ -57,13 +57,32 @@ class SearchBar extends React.Component {
   constructor (props) {
     super(props)
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
+    this.handleFilterSourcesChange = this.handleFilterSourcesChange.bind(this)
   }
 
   handleFilterTextChange (event) {
     this.props.onFilterTextChange(event)
   }
 
+  handleFilterSourcesChange (event) {
+    this.props.onFilterSourcesChange(event)
+  }
+
   render () {
+    const checkboxes = []
+    for (const [key, value] of Object.entries(this.props.filterSources)) {
+      checkboxes.push(
+        <label key={key}>
+          <input
+            id={key}
+            type="checkbox"
+            checked={value}
+            onChange={this.handleFilterSourcesChange}
+          />
+          {key}
+        </label>
+      )
+    }
     return (
       <form>
         <input
@@ -72,6 +91,7 @@ class SearchBar extends React.Component {
           value={this.props.filterText}
           onChange={this.handleFilterTextChange}
         />
+        {checkboxes}
       </form>
     )
   }
@@ -81,14 +101,16 @@ class FilterableArticleTable extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      filterText: '',
-      toeic: 600,
-      wpm: 100,
       error: null,
       isLoaded: false,
+      filterText: '',
+      filterSources: {},
+      toeic: 600,
+      wpm: 100,
       articles: []
     }
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
+    this.handleFilterSourcesChange = this.handleFilterSourcesChange.bind(this)
     this.handleToeicChange = this.handleToeicChange.bind(this)
     this.handleWpmChange = this.handleWpmChange.bind(this)
   }
@@ -101,6 +123,11 @@ class FilterableArticleTable extends React.Component {
           this.setState({
             isLoaded: true,
             articles: result
+          })
+          const filterSources = {}
+          result.forEach((article) => {
+            filterSources[article.source] = true
+            this.setState({ filterSources: filterSources })
           })
         },
         (error) => {
@@ -116,6 +143,12 @@ class FilterableArticleTable extends React.Component {
     this.setState({ filterText: event.target.value })
   }
 
+  handleFilterSourcesChange (event) {
+    const newFilterSouces = Object.assign({}, this.state.filterSources)
+    newFilterSouces[event.target.id] = event.target.checked
+    this.setState({ filterSources: newFilterSouces })
+  }
+
   handleToeicChange (event) {
     this.setState({ toeic: Number(event.target.value) })
   }
@@ -125,26 +158,30 @@ class FilterableArticleTable extends React.Component {
   }
 
   render () {
-    const { error, isLoaded, filterText, toeic, wpm, articles } = this.state
-    const filteredArticles = []
-
-    articles.forEach((article) => {
-      const reg = new RegExp(filterText, 'i')
-      if (article.title.match(reg)) {
-        filteredArticles.push(article)
-      }
-    })
-
+    const { error, isLoaded, filterText, filterSources, toeic, wpm, articles } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
+      const filteredArticles = []
+      articles.forEach((article) => {
+        const reg = new RegExp(filterText, 'i')
+        if (!article.title.match(reg)) {
+          return
+        }
+        if (filterSources[article.source] === false) {
+          return
+        }
+        filteredArticles.push(article)
+      })
       return (
         <div>
           <SearchBar
             filterText={filterText}
+            filterSources={filterSources}
             onFilterTextChange={this.handleFilterTextChange}
+            onFilterSourcesChange={this.handleFilterSourcesChange}
           />
           <label>
             Your TOEIC:
@@ -187,7 +224,9 @@ ArticleTable.propTypes = {
 
 SearchBar.propTypes = {
   filterText: PropTypes.string,
-  onFilterTextChange: PropTypes.func
+  onFilterTextChange: PropTypes.func,
+  filterSources: PropTypes.objectOf(PropTypes.bool),
+  onFilterSourcesChange: PropTypes.func
 }
 
 export default FilterableArticleTable
