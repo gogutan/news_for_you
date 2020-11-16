@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_21_050945) do
+ActiveRecord::Schema.define(version: 2020_11_16_080358) do
 
   create_table "articles", force: :cascade do |t|
     t.integer "source"
     t.string "title"
     t.string "japanese_title"
     t.integer "words"
-    t.integer "level"
+    t.integer "toeic"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "url"

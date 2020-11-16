@@ -6,7 +6,7 @@ article_1:
   japanese_title: トランプ大統領...とツイート
   url: https://example.com/
   words: 681
-  level: 7
+  toeic: 7
 
 article_2:
   source: 1
@@ -14,7 +14,7 @@ article_2:
   japanese_title: 自動運転車が...の予定
   url: https://example.com/
   words: 436
-  level: 8
+  toeic: 8
 
 article_3:
   source: 1
@@ -22,7 +22,7 @@ article_3:
   japanese_title: AI分野の経歴をどのように始めるか？
   url: https://example.com/
   words: 1218
-  level: 8
+  toeic: 8
 
 article_4:
   source: 0
@@ -30,7 +30,7 @@ article_4:
   japanese_title: ハロウィンのためのカンタンなレシピ！
   url: https://example.com/
   words: 603
-  level: 6
+  toeic: 6
 
 article_5:
   source: 1
@@ -38,4 +38,4 @@ article_5:
   japanese_title: アメリカ合衆国議会...を決議
   url: https://example.com/
   words: 1672
-  level: 9
+  toeic: 9

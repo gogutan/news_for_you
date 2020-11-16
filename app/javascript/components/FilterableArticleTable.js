@@ -17,24 +17,46 @@ class ArticleRow extends React.Component {
         <td>{article.japanese_title}</td>
         <td>{article.words}</td>
         <td>{Math.round(article.words / wpm * 10) / 10} mins</td>
-        <td>{article.level}</td>
+        <td>{article.toeic}</td>
       </tr>
     )
   }
 }
 
 class ArticleTable extends React.Component {
+  constructor (props) {
+    super(props)
+    this.handleClickSortAsc = this.handleClickSortAsc.bind(this)
+    this.handleClickSortDesc = this.handleClickSortDesc.bind(this)
+    this.handleClickSortByYourToeic = this.handleClickSortByYourToeic.bind(this)
+  }
+
+  handleClickSortAsc (event) {
+    this.props.onClickSortAsc(event)
+  }
+
+  handleClickSortDesc (event) {
+    this.props.onClickSortDesc(event)
+  }
+
+  handleClickSortByYourToeic (event) {
+    this.props.onClickSortByYourToeic(event)
+  }
+
   render () {
+    const articles = this.props.articles
+    const wpm = this.props.wpm
     const rows = []
-    this.props.articles.forEach((article) => {
+    articles.forEach((article) => {
       rows.push(
         <ArticleRow
           article={article}
           key={article.title}
-          wpm={this.props.wpm}
+          wpm={wpm}
         />
       )
     })
+
     return (
       <table>
         <thead>
@@ -43,8 +65,17 @@ class ArticleTable extends React.Component {
             <th>Title</th>
             <th>Japanese Title <img src={GoogleLogo}></img></th>
             <th>Words</th>
-            <th>Time</th>
-            <th>Level</th>
+            <th>
+              Time
+              <button name="words" onClick={this.handleClickSortAsc}>↑</button>
+              <button name="words" onClick={this.handleClickSortDesc}>↓</button>
+            </th>
+            <th>
+              TOEIC
+              <button name="toeic" onClick={this.handleClickSortAsc}>↑</button>
+              <button name="toeic" onClick={this.handleClickSortDesc}>↓</button>
+              <button name="toeic" onClick={this.handleClickSortByYourToeic}>You</button>
+            </th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
@@ -113,6 +144,9 @@ class FilterableArticleTable extends React.Component {
     this.handleFilterSourcesChange = this.handleFilterSourcesChange.bind(this)
     this.handleToeicChange = this.handleToeicChange.bind(this)
     this.handleWpmChange = this.handleWpmChange.bind(this)
+    this.handleClickSortAsc = this.handleClickSortAsc.bind(this)
+    this.handleClickSortDesc = this.handleClickSortDesc.bind(this)
+    this.handleClickSortByYourToeic = this.handleClickSortByYourToeic.bind(this)
   }
 
   componentDidMount () {
@@ -144,9 +178,9 @@ class FilterableArticleTable extends React.Component {
   }
 
   handleFilterSourcesChange (event) {
-    const newFilterSouces = Object.assign({}, this.state.filterSources)
-    newFilterSouces[event.target.id] = event.target.checked
-    this.setState({ filterSources: newFilterSouces })
+    const newFilterSources = Object.assign({}, this.state.filterSources)
+    newFilterSources[event.target.id] = event.target.checked
+    this.setState({ filterSources: newFilterSources })
   }
 
   handleToeicChange (event) {
@@ -155,6 +189,24 @@ class FilterableArticleTable extends React.Component {
 
   handleWpmChange (event) {
     this.setState({ wpm: Number(event.target.value) })
+  }
+
+  handleClickSortAsc (event) {
+    const newArticles = this.state.articles
+    newArticles.sort((a, b) => a[event.target.name] - b[event.target.name])
+    this.setState({ articles: newArticles })
+  }
+
+  handleClickSortDesc (event) {
+    const newArticles = this.state.articles
+    newArticles.sort((a, b) => b[event.target.name] - a[event.target.name])
+    this.setState({ articles: newArticles })
+  }
+
+  handleClickSortByYourToeic () {
+    const newArticles = this.state.articles
+    newArticles.sort((a, b) => Math.abs(a.toeic - this.state.toeic) - Math.abs(b.toeic - this.state.toeic))
+    this.setState({ articles: newArticles })
   }
 
   render () {
@@ -198,6 +250,9 @@ class FilterableArticleTable extends React.Component {
           <ArticleTable
             articles={filteredArticles}
             wpm={wpm}
+            onClickSortAsc={this.handleClickSortAsc}
+            onClickSortDesc={this.handleClickSortDesc}
+            onClickSortByYourToeic={this.handleClickSortByYourToeic}
           />
         </div>
       )
@@ -212,14 +267,17 @@ ArticleRow.propTypes = {
     title: PropTypes.string,
     japanese_title: PropTypes.string,
     words: PropTypes.number,
-    level: PropTypes.number
+    toeic: PropTypes.number
   }),
   wpm: PropTypes.number
 }
 
 ArticleTable.propTypes = {
   articles: PropTypes.array,
-  wpm: PropTypes.number
+  wpm: PropTypes.number,
+  onClickSortAsc: PropTypes.func,
+  onClickSortDesc: PropTypes.func,
+  onClickSortByYourToeic: PropTypes.func
 }
 
 SearchBar.propTypes = {
