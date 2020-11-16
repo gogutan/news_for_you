@@ -28,6 +28,7 @@ class ArticleTable extends React.Component {
     super(props)
     this.handleClickSortAsc = this.handleClickSortAsc.bind(this)
     this.handleClickSortDesc = this.handleClickSortDesc.bind(this)
+    this.handleClickSortByYourLevel = this.handleClickSortByYourLevel.bind(this)
   }
 
   handleClickSortAsc (event) {
@@ -36,6 +37,10 @@ class ArticleTable extends React.Component {
 
   handleClickSortDesc (event) {
     this.props.onClickSortDesc(event)
+  }
+
+  handleClickSortByYourLevel (event) {
+    this.props.onClickSortByYourLevel(event)
   }
 
   render () {
@@ -62,13 +67,14 @@ class ArticleTable extends React.Component {
             <th>Words</th>
             <th>
               Time
-              <button name="words" onClick={this.handleClickSortAsc}>⤴︎</button>
-              <button name="words" onClick={this.handleClickSortDesc}>⤵️</button>
+              <button name="words" onClick={this.handleClickSortAsc}>↑</button>
+              <button name="words" onClick={this.handleClickSortDesc}>↓</button>
             </th>
             <th>
               Level
-              <button name="level" onClick={this.handleClickSortAsc}>⤴︎</button>
-              <button name="level" onClick={this.handleClickSortDesc}>⤵️</button>
+              <button name="level" onClick={this.handleClickSortAsc}>↑</button>
+              <button name="level" onClick={this.handleClickSortDesc}>↓</button>
+              <button name="level" onClick={this.handleClickSortByYourLevel}>You</button>
             </th>
           </tr>
         </thead>
@@ -140,6 +146,7 @@ class FilterableArticleTable extends React.Component {
     this.handleWpmChange = this.handleWpmChange.bind(this)
     this.handleClickSortAsc = this.handleClickSortAsc.bind(this)
     this.handleClickSortDesc = this.handleClickSortDesc.bind(this)
+    this.handleClickSortByYourLevel = this.handleClickSortByYourLevel.bind(this)
   }
 
   componentDidMount () {
@@ -196,6 +203,12 @@ class FilterableArticleTable extends React.Component {
     this.setState({ articles: newArticles })
   }
 
+  handleClickSortByYourLevel () {
+    const newArticles = this.state.articles
+    newArticles.sort((a, b) => Math.abs(a.level - this.state.toeic) - Math.abs(b.level - this.state.toeic))
+    this.setState({ articles: newArticles })
+  }
+
   render () {
     const { error, isLoaded, filterText, filterSources, toeic, wpm, articles } = this.state
     if (error) {
@@ -239,6 +252,7 @@ class FilterableArticleTable extends React.Component {
             wpm={wpm}
             onClickSortAsc={this.handleClickSortAsc}
             onClickSortDesc={this.handleClickSortDesc}
+            onClickSortByYourLevel={this.handleClickSortByYourLevel}
           />
         </div>
       )
@@ -262,7 +276,8 @@ ArticleTable.propTypes = {
   articles: PropTypes.array,
   wpm: PropTypes.number,
   onClickSortAsc: PropTypes.func,
-  onClickSortDesc: PropTypes.func
+  onClickSortDesc: PropTypes.func,
+  onClickSortByYourLevel: PropTypes.func
 }
 
 SearchBar.propTypes = {
