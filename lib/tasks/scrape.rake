@@ -35,7 +35,7 @@ task bbc: :environment do
     url = root + href
     paragraphs = setup_doc(url).xpath("//div[contains(@data-component, 'text-block')]")
     words = paragraphs.text.split.count
-    Article.create(source: 0, title: title, japanese_title: japanese_title, url: url, words: words, toeic: 10)
+    Article.create(source: 0, title: title, japanese_title: japanese_title, url: url, words: words, toeic: 800)
   end
 end
 
@@ -50,6 +50,6 @@ task voa: :environment do
     url = source + href
     paragraphs = setup_doc(url).xpath("//div[contains(@class, 'body-container')]//p")
     words = paragraphs.text.split.count
-    Article.create(source: 1, title: title, japanese_title: japanese_title, url: url, words: words, toeic: 10)
+    Article.create(source: 1, title: title, japanese_title: japanese_title, url: url, words: words, toeic: 500)
   end
 end
