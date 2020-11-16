@@ -21,7 +21,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_difference('Article.count') do
       post articles_url, params: { article: {
         japanese_title: @article.japanese_title,
-        level: @article.level, source: @article.source,
+        toeic: @article.toeic, source: @article.source,
         title: @article.title, words: @article.words
       } }
     end
@@ -42,7 +42,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   test 'should update article' do
     patch article_url(@article), params: { article: {
       japanese_title: @article.japanese_title,
-      level: @article.level,
+      toeic: @article.toeic,
       source: @article.source,
       title: @article.title,
       words: @article.words

@@ -17,7 +17,7 @@ class ArticlesTest < ApplicationSystemTestCase
     click_on 'New Article'
 
     fill_in 'Japanese title', with: @article.japanese_title
-    fill_in 'Level', with: @article.level
+    fill_in 'TOEIC', with: @article.toeic
     fill_in 'Source', with: @article.source
     fill_in 'Title', with: @article.title
     fill_in 'Words', with: @article.words
@@ -32,7 +32,7 @@ class ArticlesTest < ApplicationSystemTestCase
     click_on 'Edit', match: :first
 
     fill_in 'Japanese title', with: @article.japanese_title
-    fill_in 'Level', with: @article.level
+    fill_in 'TOEIC', with: @article.toeic
     fill_in 'Source', with: @article.source
     fill_in 'Title', with: @article.title
     fill_in 'Words', with: @article.words

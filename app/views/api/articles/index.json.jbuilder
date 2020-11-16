@@ -5,5 +5,5 @@ json.array! @articles do |article|
   json.japanese_title article.japanese_title
   json.url            article.url
   json.words          article.words
-  json.level          article.level
+  json.toeic          article.toeic
 end
