@@ -248,6 +248,7 @@ class FilterableArticleTable extends React.Component {
             { wpms.map(w => <option key={w.toString()} value={w.toString()}>{w}</option>) }
             </select>
           </label>
+          <p>Last updated on {articles[0].created_on}</p>
           <ArticleTable
             articles={filteredArticles}
             wpm={userInfo.wpm}
