@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import GoogleLogo from 'images/greyscale-short.png'
 
+const STORAGE_KEY = 'NewsForYou!'
 const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step))
 const scores = range(300, 990, 5)
 const wpms = range(30, 300, 5)
@@ -136,7 +137,7 @@ class FilterableArticleTable extends React.Component {
       isLoaded: false,
       filterText: '',
       filterSources: {},
-      userInfo: { toeic: 600, wpm: 100 },
+      userInfo: {},
       articles: []
     }
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
@@ -169,6 +170,9 @@ class FilterableArticleTable extends React.Component {
           })
         }
       )
+    const userInfo = localStorage.getItem(STORAGE_KEY)
+    const initialUserInfo = userInfo ? JSON.parse(userInfo) : { toeic: 600, wpm: 100 }
+    this.setState({ userInfo: initialUserInfo })
   }
 
   handleFilterTextChange (event) {
@@ -185,6 +189,7 @@ class FilterableArticleTable extends React.Component {
     const newUserInfo = Object.assign({}, this.state.userInfo)
     newUserInfo[event.target.name] = Number(event.target.value)
     this.setState({ userInfo: newUserInfo })
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newUserInfo))
   }
 
   handleClickSortAsc (event) {
