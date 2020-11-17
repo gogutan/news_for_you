@@ -136,14 +136,12 @@ class FilterableArticleTable extends React.Component {
       isLoaded: false,
       filterText: '',
       filterSources: {},
-      toeic: 600,
-      wpm: 100,
+      userInfo: { toeic: 600, wpm: 100 },
       articles: []
     }
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
     this.handleFilterSourcesChange = this.handleFilterSourcesChange.bind(this)
-    this.handleToeicChange = this.handleToeicChange.bind(this)
-    this.handleWpmChange = this.handleWpmChange.bind(this)
+    this.handleUserInfoChange = this.handleUserInfoChange.bind(this)
     this.handleClickSortAsc = this.handleClickSortAsc.bind(this)
     this.handleClickSortDesc = this.handleClickSortDesc.bind(this)
     this.handleClickSortByYourToeic = this.handleClickSortByYourToeic.bind(this)
@@ -183,12 +181,10 @@ class FilterableArticleTable extends React.Component {
     this.setState({ filterSources: newFilterSources })
   }
 
-  handleToeicChange (event) {
-    this.setState({ toeic: Number(event.target.value) })
-  }
-
-  handleWpmChange (event) {
-    this.setState({ wpm: Number(event.target.value) })
+  handleUserInfoChange (event) {
+    const newUserInfo = Object.assign({}, this.state.userInfo)
+    newUserInfo[event.target.name] = Number(event.target.value)
+    this.setState({ userInfo: newUserInfo })
   }
 
   handleClickSortAsc (event) {
@@ -205,12 +201,12 @@ class FilterableArticleTable extends React.Component {
 
   handleClickSortByYourToeic () {
     const newArticles = this.state.articles
-    newArticles.sort((a, b) => Math.abs(a.toeic - this.state.toeic) - Math.abs(b.toeic - this.state.toeic))
+    newArticles.sort((a, b) => Math.abs(a.toeic - this.state.userInfo.toeic) - Math.abs(b.toeic - this.state.userInfo.toeic))
     this.setState({ articles: newArticles })
   }
 
   render () {
-    const { error, isLoaded, filterText, filterSources, toeic, wpm, articles } = this.state
+    const { error, isLoaded, filterText, filterSources, userInfo, articles } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
     } else if (!isLoaded) {
@@ -237,19 +233,19 @@ class FilterableArticleTable extends React.Component {
           />
           <label>
             Your TOEIC:
-            <select value={toeic} onChange={this.handleToeicChange}>
+            <select name="toeic" value={userInfo.toeic} onChange={this.handleUserInfoChange}>
               { scores.map(s => <option key={s.toString()} value={s.toString()}>{s}</option>) }
             </select>
           </label>
           <label>
             Your WPM:
-            <select value={wpm} onChange={this.handleWpmChange}>
+            <select name="wpm" value={userInfo.wpm} onChange={this.handleUserInfoChange}>
             { wpms.map(w => <option key={w.toString()} value={w.toString()}>{w}</option>) }
             </select>
           </label>
           <ArticleTable
             articles={filteredArticles}
-            wpm={wpm}
+            wpm={userInfo.wpm}
             onClickSortAsc={this.handleClickSortAsc}
             onClickSortDesc={this.handleClickSortDesc}
             onClickSortByYourToeic={this.handleClickSortByYourToeic}
