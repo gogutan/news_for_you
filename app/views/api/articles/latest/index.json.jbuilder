@@ -6,4 +6,5 @@ json.array! @articles do |article|
   json.url            article.url
   json.words          article.words
   json.toeic          article.toeic
+  json.created_on     article.created_at.strftime("%Y-%m-%d")
 end
