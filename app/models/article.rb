@@ -6,4 +6,8 @@ class Article < ApplicationRecord
     VOA: 1,
     NHK: 2
   }, _prefix: true
+
+  latest_date = Article.maximum(:created_at).to_date
+
+  scope :latest, -> { where(created_at: latest_date.in_time_zone.all_day) }
 end
