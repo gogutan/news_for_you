@@ -3,5 +3,8 @@ Rails.application.routes.draw do
   resources :articles
   namespace "api" do
     resources :articles, only: [:index]
+    namespace "articles" do
+      resources :latest, only: [:index]
+    end
   end
 end

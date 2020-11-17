@@ -149,7 +149,7 @@ class FilterableArticleTable extends React.Component {
   }
 
   componentDidMount () {
-    fetch('api/articles')
+    fetch('api/articles/latest')
       .then(res => res.json())
       .then(
         (result) => {
